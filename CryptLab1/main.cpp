@@ -44,15 +44,6 @@ bool millerRabin(__int128_t n, __int128_t k, bool setBase = false) {
     return true;
 }
 
-int64_t generate_Prim(int64_t n){
-    int64_t primary;
-    do{
-        primary = rand() % n + 2;
-    }
-    while(!millerRabin(primary, 3));
-    return primary;
-}
-
 
 bool bailliePSW(int64_t n) {
     if (!millerRabin(n, 3, true)) return false;
@@ -77,9 +68,32 @@ bool bailliePSW(int64_t n) {
     return false;
 }
 
+vector<__int128_t> generateBitPrimes(__int128_t bit_length, __int128_t num){
+    vector<__int128_t> prims;
+    __int128_t n = 2;
+    for (__int128_t i = 1; i < bit_length; i++){
+        n *= 2;
+    }
+    
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_int_distribution<__int128_t> distrib(2, n-1);
+
+    
+    __int128_t i = 0;
+    while(i < num){
+        __int128_t primary = distrib(gen);
+        if (bailliePSW(primary) && (find(prims.begin(), prims.end(), primary) == prims.end())){
+            prims.push_back(primary);
+            i += 1;
+        }
+    }
+
+    return prims;
+}
 
 int main(int argc, const char * argv[]) {
-    cout << "Generated primary " << generate_Prim(1000) << endl;
+    cout << "Generated prime " << (int64_t)generateBitPrimes(10, 1)[0] << endl;
     
     int64_t result = powerMod(12, 15, 14);
     cout << "12^15 mod 14 = " << result << endl;
