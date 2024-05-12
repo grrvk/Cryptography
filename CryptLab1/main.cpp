@@ -44,6 +44,15 @@ bool millerRabin(__int128_t n, __int128_t k, bool setBase = false) {
     return true;
 }
 
+int64_t generate_Prim(int64_t n){
+    int64_t primary;
+    do{
+        primary = rand() % n + 2;
+    }
+    while(!millerRabin(primary, 3));
+    return primary;
+}
+
 
 bool bailliePSW(int64_t n) {
     if (!millerRabin(n, 3, true)) return false;
@@ -70,6 +79,8 @@ bool bailliePSW(int64_t n) {
 
 
 int main(int argc, const char * argv[]) {
+    cout << "Generated primary " << generate_Prim(1000) << endl;
+    
     int64_t result = powerMod(12, 15, 14);
     cout << "12^15 mod 14 = " << result << endl;
     
