@@ -122,17 +122,6 @@ bool StrongLucasPrimTest(__int128_t n, __int128_t p, __int128_t q){
     return false;
 }
 
-__int128_t getIndex(string nV){
-    __int128_t result = 0;
-    for(int i = 0; i < size(nV); i++){
-        int el = (__int128_t)nV[i] - 48;
-        if (el == 1){
-            result += powerMod(2, size(nV)-1-i, 64);
-        }
-    }
-    return result;
-}
-
 string binary(__int128_t n){
     string r;
     while(n!=0){
@@ -143,24 +132,16 @@ string binary(__int128_t n){
 }
 
 string base64str(__int128_t n){
-    static const string base64_chars =
-                 "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                 "abcdefghijklmnopqrstuvwxyz"
-                 "0123456789+/";
+    string alph64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
     string r;
-    string all_representation;
-    
-    while (n > 0)
-    {
-        int digit = n%10;
-        n /= 10;
-        all_representation = bitset<8>(digit).to_string() + all_representation;
+    if(n == 0){
+        return "0";
     }
-    for (int i = 0; i < all_representation.length()/6; i++){
-        string subPart = all_representation.substr (6*i, 6);
-        __int128_t index = getIndex(subPart);
-        r += base64_chars[index];
+    while(n > 0){
+        r += alph64[n % 64];
+        n /= 64;
     }
+    reverse(r.begin(), r.end());
     return r;
 }
 
