@@ -122,4 +122,63 @@ bool StrongLucasPrimTest(__int128_t n, __int128_t p, __int128_t q){
     return false;
 }
 
+__int128_t getIndex(string nV){
+    __int128_t result = 0;
+    for(int i = 0; i < size(nV); i++){
+        int el = (__int128_t)nV[i] - 48;
+        if (el == 1){
+            result += powerMod(2, size(nV)-1-i, 64);
+        }
+    }
+    return result;
+}
+
+string binary(__int128_t n){
+    string r;
+    while(n!=0){
+        r = ( n % 2==0 ? "0" : "1") + r;
+        n /= 2;
+    }
+    return r;
+}
+
+string base64str(__int128_t n){
+    static const string base64_chars =
+                 "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                 "abcdefghijklmnopqrstuvwxyz"
+                 "0123456789+/";
+    string r;
+    string all_representation;
+    
+    while (n > 0)
+    {
+        int digit = n%10;
+        n /= 10;
+        all_representation = bitset<8>(digit).to_string() + all_representation;
+    }
+    for (int i = 0; i < all_representation.length()/6; i++){
+        string subPart = all_representation.substr (6*i, 6);
+        __int128_t index = getIndex(subPart);
+        r += base64_chars[index];
+    }
+    return r;
+}
+
+void bytes(__int128_t n)
+{
+    char byte_array[sizeof(__int128_t)];
+
+    memcpy(byte_array, &n, sizeof(__int128_t));
+    for (size_t i = 0; i < sizeof(__int128_t); ++i) {
+        cout << static_cast<int>(byte_array[i]) << " ";
+    }
+}
+
+void diffOutput(__int128_t n){
+    cout << "base2: " << binary(n) << endl;
+    cout << "base10: " << (int64_t)n << endl;
+    cout << "base64: " << base64str(n) << endl;
+    cout << "byte[]: "; bytes(n); cout << endl;
+}
+
 #endif /* functions_h */

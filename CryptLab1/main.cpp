@@ -93,7 +93,9 @@ vector<__int128_t> generateBitPrimes(__int128_t bit_length, __int128_t num){
 }
 
 int main(int argc, const char * argv[]) {
-    cout << "Generated prime " << (int64_t)generateBitPrimes(10, 1)[0] << endl;
+    __int128_t generatedPrime = generateBitPrimes(10, 1)[0];
+    cout << "Generated prime " << (int64_t)generatedPrime << endl;
+    diffOutput(generatedPrime);
     
     int64_t result = powerMod(12, 15, 14);
     cout << "12^15 mod 14 = " << result << endl;
